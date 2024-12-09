@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Collage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #collage-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 5px;
+      width: 300px; /* Fixed size for the collage */
+      height: 300px;
+      margin: 20px auto;
+    }
+    #generateCollage {
+        background-color: cornflowerblue;
+        color: white;
+        font-size: 15px;
+        border-radius: 10px;
+        border: none;
+        padding: 6px 10px;
+    }
+    .image-box {
+      overflow: hidden;
+    }
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures images fit perfectly */
+    }
+  </style>
+</head>
+<body>
+    <h1>Create a Collage</h1>
+    <div>
+        <input type="file" id="image-input" multiple accept="image/*">
+        <button onclick="generateCollage()" id="generateCollage">Generate Collage</button>
+        <div id="collage-container"></div>
+    </div>
+
+  <script>
+    function generateCollage() {
+      const input = document.getElementById("image-input");
+      const collageContainer = document.getElementById("collage-container");
+      collageContainer.innerHTML = ""; // Clear existing content
+
+      const files = Array.from(input.files);
+      if (files.length !== 4) {
+        alert("Please upload exactly 4 images.");
+        return;
+      }
+
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = document.createElement("img");
+          img.src = event.target.result;
+
+          const imageBox = document.createElement("div");
+          imageBox.classList.add("image-box");
+          imageBox.appendChild(img);
+
+          collageContainer.appendChild(imageBox);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>

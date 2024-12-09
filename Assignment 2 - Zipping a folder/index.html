@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Folder Zipper</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="ml-20 mt-20">
+        <h2 class="text-lg font-medium mb-10">Zip Files</h2>
+        <input type="file" id="fileInput" multiple>
+        <button onclick="zipFiles()" class="bg-blue-400 rounded-lg text-white px-2 py-1">Create ZIP</button>
+        <div id="output" class="mt-3 text-blue-600 underline"></div>
+    </div>
+
+
+    <script>
+        async function zipFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            const output = document.getElementById('output');
+
+            if (files.length === 0) {
+                output.innerHTML = "No files selected.";
+                return;
+            }
+
+            const zip = new JSZip();
+            Array.from(files).forEach(file => {
+                zip.file(file.name, file);
+            });
+
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = "files.zip";
+            link.textContent = "Download ZIP";
+            output.innerHTML = "";
+            output.appendChild(link);
+        }
+    </script>
+</body>
+</html>
